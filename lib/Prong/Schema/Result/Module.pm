@@ -83,5 +83,7 @@ __PACKAGE__->has_many( features =>
     'Prong::Schema::Result::ModuleFeature' => 'module_id' );
 __PACKAGE__->has_many( preloads =>
     'Prong::Schema::Result::ModulePreload' => 'module_id' );
+__PACKAGE__->has_many( userprefs =>
+    'Prong::Schema::Result::ModuleUserPref' => 'module_id' );
 
 1;

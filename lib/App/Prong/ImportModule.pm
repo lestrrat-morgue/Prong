@@ -65,6 +65,11 @@ sub create_module {
     my $module = $schema->resultset('Module')->create( \%args );
 
     $self->create_module_prefs( $module, $schema, $xml->findnodes('/Module/ModulePrefs' ) );
+
+    foreach my $userpref ($xml->findnodes('/Module/UserPref')) {
+        $self->create_module_userpref( $module, $schema, $userpref );
+    }
+
     foreach my $content ($xml->findnodes('/Module/Content')) {
         $self->create_module_content( $module, $schema, $content );
     }
@@ -116,6 +121,21 @@ sub _get_module_prefs {
     }
 
     return %attrs;
+}
+
+sub create_module_userpref {
+    my ($self, $module, $schema, $xml) = @_;
+
+    my %attrs = (
+        name => $xml->findvalue('@name'),
+        data_type => $xml->findvalue('@datatype') || undef,
+    );
+
+    foreach my $attr qw(display_name default_alue) {
+        my $value = $xml->findvalue("\@$attr");
+        $attrs{ $attr } = $value if defined $value && length $value;
+    }
+    $module->create_related('userprefs', \%attrs );
 }
 
 sub create_module_content {
