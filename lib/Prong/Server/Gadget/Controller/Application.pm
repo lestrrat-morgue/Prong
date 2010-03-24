@@ -4,10 +4,11 @@ use namespace::autoclean;
 
 extends 'Prong::Server::Gadget::Controller';
 
-sub register {
+override register => sub {
     my ($self, $server) = @_;
+    super();
     $server->add_route('/app/{module_id}' => { controller => $self, action => 'view' } );
-}
+};
 
 sub view {
     my ($self, $req, $p) = @_;
